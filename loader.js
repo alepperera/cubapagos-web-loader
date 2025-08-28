@@ -10,6 +10,17 @@
     zIndex: 99999
   };
 
+  // Cubapagos Loader v1.1 – drop-in for Flutter Web
+(function () {
+  const DEFAULTS = {
+    brandColor: '#22AD01',
+    dark: '#0a0a0a',
+    bg: '#ffffff',
+    logoUrl: 'https://feuiudsnyatcccykdxdc.supabase.co/storage/v1/object/public/assets/cp_logo.png',
+    message: 'Loading Cubapagos…',
+    zIndex: 99999
+  };
+
   function createStyles(opts) {
     const css = `
       .cp-loader__overlay {
@@ -27,7 +38,7 @@
         max-width: 320px; width: calc(100% - 48px);
       }
       .cp-loader__logo {
-        width: 48px; height: 48px; object-fit: contain; display: ${opts.logoUrl ? 'block':'none'};
+        width: 64px; height: 64px; object-fit: contain; display: ${opts.logoUrl ? 'block':'none'};
       }
       .cp-loader__spinner {
         width: 42px; height: 42px; border-radius: 50%;
@@ -67,7 +78,7 @@
 
     overlay.innerHTML = `
       <div class="cp-loader__card" role="status" aria-live="polite">
-        <img src="${opts.logoUrl}" alt="" class="cp-loader__logo"/>
+        <img src="${opts.logoUrl}" alt="Cubapagos logo" class="cp-loader__logo"/>
         <div class="cp-loader__spinner" aria-hidden="true"></div>
         <div class="cp-loader__bar"><div class="cp-loader__bar-fill" id="cp-loader-fill"></div></div>
         <div class="cp-loader__text" id="cp-loader-text">${opts.message}</div>
@@ -110,12 +121,11 @@
     }
   };
 
-  // Expose globally
   window.CubapagosLoader = API;
 
-  // Optional auto-mount (safe if included very early in <head>)
   document.addEventListener('DOMContentLoaded', () => {
     if (!API.mounted) API.mount();
   });
 })();
+
 </script>
