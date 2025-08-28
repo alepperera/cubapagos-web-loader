@@ -1,14 +1,6 @@
 <script>
 // Cubapagos Loader v1.0 – drop-in for Flutter Web
 (function () {
-  const DEFAULTS = {
-    brandColor: '#22AD01',
-    dark: '#0a0a0a',
-    bg: '#ffffff',
-    logoUrl: '',         // optional: show a small logo
-    message: 'Loading Cubapagos…',
-    zIndex: 99999
-  };
 
 
   const DEFAULTS = {
