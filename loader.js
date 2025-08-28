@@ -1,122 +1,50 @@
-<script>
-// Cubapagos Loader v1.0 – drop-in for Flutter Web
-(function () {
+// Create the overlay and SVG elements
+const overlay = document.createElement('div');
+overlay.id = 'loader';
+overlay.style.cssText = `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 999;
+`;
 
+const svgImage = document.createElement('img');
+svgImage.id = 'svgImage';
+svgImage.src = 'https://alepperera.github.io/cubapagos-web-loader/imagen.svg';
+svgImage.style.cssText = `
+    max-width: 20%;
+    max-height: 20%;
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+svgImage.style.display = 'none';
 
-  const DEFAULTS = {
-    brandColor: '#22AD01',
-    dark: '#0a0a0a',
-    bg: '#ffffff',
-    logoUrl: 'https://feuiudsnyatcccykdxdc.supabase.co/storage/v1/object/public/assets/cp_logo.png',
-    message: 'Cargando Cubapagos…',
-    zIndex: 99999
-  };
+// Append the elements to the body
+document.body.appendChild(overlay);
+document.body.appendChild(svgImage);
 
-  function createStyles(opts) {
-    const css = `
-      .cp-loader__overlay {
-        position: fixed; inset: 0; z-index: ${opts.zIndex};
-        display: flex; align-items: center; justify-content: center;
-        background: ${opts.bg};
-        transition: opacity .35s ease, visibility .35s ease;
-      }
-      .cp-loader__hidden { opacity: 0; visibility: hidden; }
-      .cp-loader__card {
-        display: flex; flex-direction: column; align-items: center; gap: 16px;
-        padding: 24px 28px; border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,.08);
-        background: #fff; border: 1px solid rgba(0,0,0,.06);
-        max-width: 320px; width: calc(100% - 48px);
-      }
-      .cp-loader__logo {
-        width: 64px; height: 64px; object-fit: contain; display: ${opts.logoUrl ? 'block':'none'};
-      }
-      .cp-loader__spinner {
-        width: 42px; height: 42px; border-radius: 50%;
-        border: 3px solid rgba(0,0,0,.08);
-        border-top-color: ${opts.brandColor};
-        animation: cp-spin 1s linear infinite;
-      }
-      @keyframes cp-spin { to { transform: rotate(360deg); } }
-      .cp-loader__bar {
-        width: 100%; height: 8px; background: #f2f2f2; border-radius: 999px; overflow: hidden;
-        border: 1px solid rgba(0,0,0,.06);
-      }
-      .cp-loader__bar-fill {
-        height: 100%; width: 0%;
-        background: linear-gradient(90deg, ${opts.brandColor}, ${opts.dark});
-        transition: width .25s ease;
-      }
-      .cp-loader__text {
-        font: 600 14px/1.2 ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, system-ui, Arial;
-        color: ${opts.dark}; text-align: center;
-      }
-      .cp-loader__hint {
-        font: 12px/1.2 ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, system-ui, Arial;
-        color: #666; text-align: center;
-      }
-    `;
-    const tag = document.createElement('style');
-    tag.id = 'cp-loader-styles';
-    tag.textContent = css;
-    document.head.appendChild(tag);
-  }
+// Function to hide the overlay and display the SVG
+function hideOverlay() {
+    overlay.style.display = 'none';
+    svgImage.style.display = 'block';
+}
 
-  function createDOM(opts) {
-    const overlay = document.createElement('div');
-    overlay.className = 'cp-loader__overlay';
-    overlay.id = 'cp-loader';
+// Add an event listener to hide the overlay when all external JS files are loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Replace the following lines with the actual code that loads your external JS files
+    // For demonstration purposes, we'll use a setTimeout to simulate loading external JS files.
+    setTimeout(hideOverlay, 100); // Replace with your actual loading code.
+});
 
-    overlay.innerHTML = `
-      <div class="cp-loader__card" role="status" aria-live="polite">
-        <img src="${opts.logoUrl}" alt="Cubapagos logo" class="cp-loader__logo"/>
-        <div class="cp-loader__spinner" aria-hidden="true"></div>
-        <div class="cp-loader__bar"><div class="cp-loader__bar-fill" id="cp-loader-fill"></div></div>
-        <div class="cp-loader__text" id="cp-loader-text">${opts.message}</div>
-        <div class="cp-loader__hint">Starting Flutter…</div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-  }
-
-  function ensureOnce(id) {
-    const existing = document.getElementById(id);
-    if (existing) existing.remove();
-  }
-
-  const API = {
-    mounted: false,
-    mount(userOptions) {
-      if (this.mounted) return;
-      const opts = Object.assign({}, DEFAULTS, userOptions || {});
-      ensureOnce('cp-loader-styles');
-      createStyles(opts);
-      ensureOnce('cp-loader');
-      createDOM(opts);
-      this.mounted = true;
-    },
-    setMessage(msg) {
-      const el = document.getElementById('cp-loader-text');
-      if (el) el.textContent = msg;
-    },
-    setProgress(pct) {
-      const fill = document.getElementById('cp-loader-fill');
-      if (fill) fill.style.width = Math.max(0, Math.min(100, pct)) + '%';
-    },
-    remove() {
-      const overlay = document.getElementById('cp-loader');
-      if (!overlay) return;
-      overlay.classList.add('cp-loader__hidden');
-      setTimeout(() => overlay.remove(), 400);
-      this.mounted = false;
-    }
-  };
-
-  window.CubapagosLoader = API;
-
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!API.mounted) API.mount();
-  });
-})();
-
-</script>
+// Fallback: If all external resources are loaded and the DOMContentLoaded event doesn't fire,
+// we'll still hide the overlay when the window's load event is triggered.
+window.addEventListener('load', hideOverlay);
