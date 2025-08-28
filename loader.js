@@ -10,8 +10,7 @@
     zIndex: 99999
   };
 
-  // Cubapagos Loader v1.1 – drop-in for Flutter Web
-(function () {
+
   const DEFAULTS = {
     brandColor: '#22AD01',
     dark: '#0a0a0a',
