@@ -8,7 +8,7 @@
     dark: '#0a0a0a',
     bg: '#ffffff',
     logoUrl: 'https://feuiudsnyatcccykdxdc.supabase.co/storage/v1/object/public/assets/cp_logo.png',
-    message: 'Loading Cubapagos…',
+    message: 'Cargando Cubapagos…',
     zIndex: 99999
   };
 
